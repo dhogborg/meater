@@ -1,0 +1,12 @@
+#/bin/bash
+
+# Download the image from the server
+curl $URL -o /tmp/meater.jpg > /dev/null 2>&1
+
+# transform it to extract the numbers from this particular image
+convert /tmp/meater.jpg -rotate -5.8 -crop 100x22+311+206 -modulate 100,0 -level 25%,70% /tmp/crop.jpg 
+
+# translate the image to numbers with gosser
+result=`gosser -i /tmp/crop.jpg -p 7 -o int --pedantic --div 1000 2>&1`
+
+echo "$(date): $result"
