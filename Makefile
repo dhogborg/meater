@@ -9,5 +9,8 @@ default: build
 build:
 	docker build -t dhogborg/meater:latest .
 
+push:
+	docker push dhogborg/meater:latest
+
 run: 
 	docker run -ti --rm -e URL=$URL dhogborg/meater:latest
