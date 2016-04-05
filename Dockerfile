@@ -13,5 +13,6 @@ ADD run.sh /run.sh
 RUN chmod 755 /getmeater /run.sh
 
 ADD config/ /config
+ADD bin/atnetgo /usr/bin/atnetgo
 
 CMD ["/run.sh"]
