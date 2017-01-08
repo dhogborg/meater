@@ -17,10 +17,9 @@ else
 	curl -i -XPOST 'http://influxdb:8086/write?db=meater' --data-binary "readerror,type=heating,source=gosser value=1" > /dev/null 2>&1
 fi
 
-atnetgo --station 'Rositas gata' --module 'Indoor' | grep Temperature | awk '{print $2}' > /tmp/temperature 2>&1
+atnetgo influx | grep rositas > /tmp/temperature 2>&1
 if [ $? -eq 0 ]; then
-	temperature=`cat /tmp/temperature`
-	curl -i -XPOST 'http://influxdb:8086/write?db=environment' --data-binary "temperature,module=indoor value=$temperature" > /dev/null 2>&1
+	curl -i -XPOST 'http://influxdb:8086/write?db=environment' --data-binary @/tmp/temperature > /dev/null 2>&1
 fi
 
 result=`cat /tmp/result`
