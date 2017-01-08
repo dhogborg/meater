@@ -1,4 +1,4 @@
-FROM dhogborg/gosser
+FROM debian
 
 MAINTAINER David Högborg <d@hogborg.se>
 
@@ -14,7 +14,9 @@ RUN chmod 755 /getmeater /run.sh
 
 ADD config/ /config
 
+# install gosser and atnetgo
 RUN apt-get install -yq unzip
+RUN curl -L https://github.com/dhogborg/gosser/releases/download/v0.0.2/gosser_linux64.zip -O ; unzip gosser_linux64.zip ; cp build/gosser /usr/bin
 RUN curl -L https://github.com/dhogborg/atnetgo/releases/download/v0.0.4/atnetgo_linux64.zip -O ; unzip atnetgo_linux64.zip ; cp build/atnetgo /usr/bin/
 
 CMD ["/run.sh"]

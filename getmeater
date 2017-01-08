@@ -7,7 +7,7 @@ curl $URL -o /tmp/meater.jpg > /dev/null 2>&1
 convert /tmp/meater.jpg $PREPROCESS /tmp/crop.jpg 
 
 # translate the image to numbers with gosser
-gosser -i /tmp/crop.jpg -p 7 -o int --pedantic --div 1000 --manifest config/manifest.json > /tmp/result 2>&1
+gosser -i /tmp/crop.jpg -p 7 -o number --pedantic --div 1000 --manifest config/manifest.json > /tmp/result 2>&1
 
 if [ $? -eq 0 ]; then
 	# insert into influxdb
