@@ -12,7 +12,13 @@ gosser -i /tmp/crop.jpg -p 7 -o number --pedantic --div 1000 --manifest config/m
 if [ $? -eq 0 ]; then
 	# insert into influxdb
 	result=`cat /tmp/result`
-	curl -i -XPOST 'http://influxdb:8086/write?db=meater' --data-binary "meterreading,type=heating,unit=MWh value=$result" > /dev/null 2>&1
+	prev=`cat /tmp/prev`
+
+	# check if the result went down, that shouldn't happen, mark it as potentially invalid
+	valid=`awk -v r1=$result -v r2=$prev 'BEGIN {if (r2 > r1) print "false"; else print "true"};'`
+	echo $result > /tmp/prev
+	
+	curl -i -XPOST 'http://influxdb:8086/write?db=meater' --data-binary "meterreading,type=heating,unit=MWh,valid=$valid value=$result" > /dev/null 2>&1
 else
 	curl -i -XPOST 'http://influxdb:8086/write?db=meater' --data-binary "readerror,type=heating,source=gosser value=1" > /dev/null 2>&1
 fi
